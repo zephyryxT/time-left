@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Progression de l'année scolaire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+  --text:#0f1114;
+  --muted:#444a54;
+  --hair:#d3d7de;
+  --display:"Unbounded","Manrope",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+html{ scroll-padding-top:env(safe-area-inset-top,0px); }
+*,*::before,*::after{ box-sizing:inherit; }
+body{
+  margin:0;
+  background:#fff;
+  color:var(--text);
+  font-family:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:17px;
+  line-height:1.55;
+  font-weight:500;
+  font-variant-numeric:tabular-nums;
+}
+body.has-cursor, body.has-cursor *{ cursor:none; }
+
+.page{
+  max-width:1040px;
+  margin:0 auto;
+  padding:56px 28px 72px;
+  display:grid;
+  grid-template-columns:minmax(0,500px) 1fr;
+  gap:56px;
+  align-items:start;
+}
+
+/* ---------- Fond animé : reflets d'argent qui dérivent ---------- */
+.bg{ position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none; background:linear-gradient(180deg,#fff 0%,#f2f4f7 100%); }
+.orb{ position:absolute; border-radius:50%; will-change:transform; }
+.o1{ width:70vmax; height:70vmax; left:-25vmax; top:-30vmax; background:radial-gradient(closest-side,rgba(196,202,212,.75),rgba(196,202,212,0)); animation:orb1 28s ease-in-out infinite alternate; }
+.o2{ width:60vmax; height:60vmax; right:-22vmax; bottom:-28vmax; background:radial-gradient(closest-side,rgba(178,185,197,.7),rgba(178,185,197,0)); animation:orb2 34s ease-in-out infinite alternate; }
+.o3{ width:38vmax; height:38vmax; left:30vw; top:35vh; background:radial-gradient(closest-side,rgba(214,219,227,.9),rgba(214,219,227,0)); animation:orb3 24s ease-in-out infinite alternate; }
+.sheen{ position:absolute; top:-40%; bottom:-40%; left:-30%; width:60%; transform:rotate(18deg); background:linear-gradient(90deg,transparent,rgba(255,255,255,.95) 45%,rgba(176,183,195,.28) 50%,rgba(255,255,255,.95) 55%,transparent); animation:sheen 20s ease-in-out infinite alternate; }
+@keyframes orb1{ to{ transform:translate(22vmax,14vmax) scale(1.15); } }
+@keyframes orb2{ to{ transform:translate(-20vmax,-12vmax) scale(1.2); } }
+@keyframes orb3{ to{ transform:translate(-18vw,14vh) scale(1.3); } }
+@keyframes sheen{ from{ transform:translateX(-10vw) rotate(18deg); } to{ transform:translateX(150vw) rotate(18deg); } }
+
+/* ---------- Décor chrome ---------- */
+.art{
+  position:sticky;
+  top:24px;
+  height:calc(100vh - 48px);
+  min-height:460px;
+}
+.art svg{ width:100%; height:100%; display:block; overflow:visible; }
+.drift{ animation:drift 8s ease-in-out infinite alternate; }
+.drift.b{ animation-duration:11s; animation-delay:-3s; }
+.drift.c{ animation-duration:9s; animation-delay:-6s; }
+@keyframes drift{ from{ transform:translateY(-7px); } to{ transform:translateY(9px); } }
+
+/* ---------- Contenu ---------- */
+h1{ margin:0; font-family:var(--display); font-size:clamp(16px,4.6vw,20px); font-weight:700; letter-spacing:-.02em; line-height:1.3; }
+h2{ margin:0; font-family:var(--display); font-size:15px; font-weight:700; letter-spacing:-.01em; }
+.sub{ margin:4px 0 0; color:var(--muted); font-size:15px; font-weight:500; }
+
+.big{
+  margin:32px 0 0;
+  font-family:var(--display);
+  font-size:clamp(44px,11vw,72px);
+  font-weight:700;
+  letter-spacing:-.05em;
+  line-height:1.1;
+  color:#2b2e34;
+}
+@supports (-webkit-background-clip:text) or (background-clip:text){
+  .big{
+    background:linear-gradient(180deg,#0f1114 0%,#646b77 38%,#16191d 54%,#555c68 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+}
+
+.bar{
+  position:relative;
+  height:14px;
+  margin:14px 0 10px;
+  border-radius:99px;
+  background:linear-gradient(#dfe2e7,#f5f6f8);
+  box-shadow:inset 0 1px 3px rgba(20,24,30,.3);
+}
+.fill{
+  height:100%;
+  width:0;
+  border-radius:99px;
+  background:linear-gradient(180deg,#fff 0%,#d3d7dd 22%,#8b929c 48%,#23272d 52%,#79808a 70%,#e9ecef 100%);
+  box-shadow:inset 0 0 0 1px rgba(20,24,30,.4);
+  transition:width .6s ease-out;
+}
+.bar i{
+  position:absolute;
+  top:-4px; bottom:-4px;
+  width:2px;
+  background:#fff;
+  box-shadow:0 0 0 1px var(--hair);
+}
+.bar i:nth-of-type(1){ left:33.333%; }
+.bar i:nth-of-type(2){ left:66.666%; }
+
+section{ margin-top:52px; }
+section.first{ margin-top:28px; }
+dl{ margin:12px 0 0; }
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:16px;
+  padding:14px 0;
+  border-bottom:1px solid var(--hair);
+}
+.row:first-child{ border-top:1px solid var(--hair); }
+.row dt{ color:var(--muted); }
+.row dd{ margin:0; font-weight:700; }
+.pct-line{ display:flex; justify-content:space-between; align-items:baseline; gap:16px; }
+.pct-line strong{ font-family:var(--display); font-size:20px; font-weight:700; letter-spacing:-.04em; }
+
+/* ---------- Curseur goutte de chrome ---------- */
+.cur{
+  display:none;
+  position:fixed;
+  left:0; top:0;
+  z-index:100;
+  width:26px; height:26px;
+  margin:-13px 0 0 -13px;
+  border-radius:50%;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 30% 26%,#fff 0 11%,rgba(255,255,255,0) 30%),
+    radial-gradient(circle at 72% 80%,rgba(255,255,255,.9) 0 7%,rgba(255,255,255,0) 20%),
+    linear-gradient(165deg,#f6f7f9 0%,#a0a6af 30%,#15171b 52%,#b9bec6 72%,#fff 100%);
+  box-shadow:inset 0 0 0 1px rgba(20,24,30,.3),0 6px 14px rgba(40,50,70,.28);
+}
+.cur.tail{ width:12px; height:12px; margin:-6px 0 0 -6px; z-index:99; }
+body.has-cursor .cur{ display:block; }
+body.out .cur{ opacity:0; }
+
+@media (max-width:860px){
+  .page{ grid-template-columns:1fr; gap:12px; padding:20px 20px 56px; }
+  .art{ position:relative; top:0; order:-1; height:250px; min-height:0; }
+}
+@media (prefers-reduced-motion:reduce){
+  .drift,.orb,.sheen{ animation:none; }
+  .fill{ transition:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span><span class="sheen"></span></div>
+
+<div class="cur" id="cur"></div>
+<div class="cur tail" id="tail"></div>
+
+<div class="page">
+
+  <main>
+    <h1 id="titre">Année scolaire</h1>
+    <p class="sub" id="today">&nbsp;</p>
+
+    <p class="big" id="percent">0 %</p>
+    <div class="bar" role="progressbar" aria-label="Progression de l'année scolaire" aria-valuemin="0" aria-valuemax="100" id="bar">
+      <div class="fill" id="fill"></div>
+    </div>
+    <p class="sub" id="periode">&nbsp;</p>
+
+    <section class="first">
+      <dl>
+        <div class="row"><dt>Jours écoulés</dt><dd id="passed">–</dd></div>
+        <div class="row"><dt>Jours restants</dt><dd id="remaining">–</dd></div>
+        <div class="row"><dt>Durée totale</dt><dd><span id="total">–</span> jours</dd></div>
+      </dl>
+    </section>
+
+    <section>
+      <div class="pct-line">
+        <h2>Lycée complet</h2>
+        <strong id="percent-lycee">0 %</strong>
+      </div>
+      <div class="bar" role="progressbar" aria-label="Progression du lycée sur 3 ans" aria-valuemin="0" aria-valuemax="100" id="bar-lycee">
+        <div class="fill" id="fill-lycee"></div>
+        <i></i><i></i>
+      </div>
+      <p class="sub" id="annee-lycee">&nbsp;</p>
+    </section>
+
+    <section>
+      <h2>Part de l'année</h2>
+      <dl>
+        <div class="row"><dt>1 jour</dt><dd><span id="day">–</span> %</dd></div>
+        <div class="row"><dt>1 semaine</dt><dd><span id="week">–</span> %</dd></div>
+        <div class="row"><dt>1 mois (30,44 jours)</dt><dd><span id="month">–</span> %</dd></div>
+      </dl>
+    </section>
+  </main>
+
+  <div class="art" aria-hidden="true">
+    <svg viewBox="0 0 420 560" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="chrome" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#ffffff"/>
+          <stop offset=".16" stop-color="#cfd3d9"/>
+          <stop offset=".32" stop-color="#6c727c"/>
+          <stop offset=".45" stop-color="#101215"/>
+          <stop offset=".58" stop-color="#8d939d"/>
+          <stop offset=".72" stop-color="#f3f5f7"/>
+          <stop offset=".86" stop-color="#a7adb5"/>
+          <stop offset="1" stop-color="#5b616a"/>
+        </linearGradient>
+        <filter id="bevel" x="-10%" y="-10%" width="120%" height="120%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="b"/>
+          <feSpecularLighting in="b" surfaceScale="7" specularConstant="1.1" specularExponent="26" lighting-color="#fff" result="s">
+            <fePointLight x="80" y="0" z="220"/>
+          </feSpecularLighting>
+          <feComposite in="s" in2="SourceAlpha" operator="in" result="si"/>
+          <feComposite in="SourceGraphic" in2="si" operator="arithmetic" k2="1" k3="1"/>
+        </filter>
+        <filter id="bevelS" x="-15%" y="-15%" width="130%" height="130%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="b"/>
+          <feSpecularLighting in="b" surfaceScale="5" specularConstant="1.1" specularExponent="22" lighting-color="#fff" result="s">
+            <fePointLight x="-30" y="-45" z="70"/>
+          </feSpecularLighting>
+          <feComposite in="s" in2="SourceAlpha" operator="in" result="si"/>
+          <feComposite in="SourceGraphic" in2="si" operator="arithmetic" k2="1" k3="1"/>
+        </filter>
+        <filter id="soft"><feGaussianBlur stdDeviation="4"/></filter>
+        <path id="sculpt" fill-rule="evenodd" clip-rule="evenodd" d="M250 30C330 20 380 70 360 140C345 190 300 210 310 260C320 310 370 330 350 390C330 450 250 480 190 450C140 425 150 380 185 350C215 325 215 295 185 270C140 235 110 190 140 130C165 80 200 38 250 30ZM245 130C280 120 300 150 285 185C270 215 235 215 225 185C215 155 225 135 245 130Z"/>
+        <clipPath id="cs"><use href="#sculpt" clip-rule="evenodd"/></clipPath>
+        <path id="drop" d="M0-34C26-40 44-14 34 12C26 34-2 40-22 28C-42 16-34-26 0-34Z"/>
+      </defs>
+
+      <g class="drift b"><use href="#drop" fill="url(#chrome)" filter="url(#bevelS)" transform="translate(70 470) scale(1.05) rotate(-20)"/></g>
+      <g class="drift c"><use href="#drop" fill="url(#chrome)" filter="url(#bevelS)" transform="translate(360 505) scale(.55) rotate(35)"/></g>
+      <g class="drift b"><use href="#drop" fill="url(#chrome)" filter="url(#bevelS)" transform="translate(60 120) scale(.7) rotate(60)"/></g>
+    </svg>
+  </div>
+
+</div>
+
+<script>
+// ---- À modifier si besoin -------------------------------------------------
+const DEBUT = new Date(2026, 8, 1);   // 1er septembre 2026 (mois : 0 = janvier)
+const FIN   = new Date(2027, 6, 2);   // 2 juillet 2027
+const ANNEE_LYCEE = 1;                // 1 = seconde, 2 = première, 3 = terminale
+// ---------------------------------------------------------------------------
+
+const JOUR = 86400000;
+const NOMS_ANNEES = ["Seconde", "Première", "Terminale"];
+
+const $ = id => document.getElementById(id);
+const nf = (n, d = 2) => n.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
+const pct = n => nf(n) + "\u202f%";
+const dateLongue = d => d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+
+$("titre").textContent = "Année scolaire " + DEBUT.getFullYear() + "–" + FIN.getFullYear();
+$("periode").textContent = "Du " + dateLongue(DEBUT) + " au " + dateLongue(FIN);
+$("annee-lycee").textContent = NOMS_ANNEES[ANNEE_LYCEE - 1] + ", année " + ANNEE_LYCEE + " sur 3";
+
+const dureeMs = FIN - DEBUT;
+const total = Math.round(dureeMs / JOUR);
+
+function maj() {
+  const now = new Date();
+  const ratio = Math.min(Math.max((now - DEBUT) / dureeMs, 0), 1);
+  const percent = ratio * 100;
+  const ecoules = Math.floor(ratio * total);
+
+  $("percent").textContent = pct(percent);
+  $("fill").style.width = percent + "%";
+  $("bar").setAttribute("aria-valuenow", percent.toFixed(2));
+
+  const percentLycee = ((ANNEE_LYCEE - 1) * 100 + percent) / 3;
+  $("percent-lycee").textContent = pct(percentLycee);
+  $("fill-lycee").style.width = percentLycee + "%";
+  $("bar-lycee").setAttribute("aria-valuenow", percentLycee.toFixed(2));
+
+  $("passed").textContent = ecoules;
+  $("remaining").textContent = total - ecoules;
+  $("total").textContent = total;
+
+  $("day").textContent = nf(100 / total, 3);
+  $("week").textContent = nf(700 / total);
+  $("month").textContent = nf(3044 / total);
+
+  const jour = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  $("today").textContent = jour.charAt(0).toUpperCase() + jour.slice(1) + ", " + now.toLocaleTimeString("fr-FR");
+}
+maj();
+setInterval(maj, 1000);
+
+// ---- Curseur : goutte de chrome qui s'étire avec la vitesse ---------------
+if (matchMedia("(hover:hover) and (pointer:fine)").matches) {
+  const calme = matchMedia("(prefers-reduced-motion:reduce)").matches;
+  const cur = $("cur"), tail = $("tail");
+  let x = innerWidth / 2, y = innerHeight / 2;
+  let cx = x, cy = y, tx = x, ty = y;
+
+  addEventListener("pointermove", e => {
+    x = e.clientX; y = e.clientY;
+    document.body.classList.add("has-cursor");
+    document.body.classList.remove("out");
+  });
+  document.documentElement.addEventListener("mouseleave", () => document.body.classList.add("out"));
+
+  (function boucle() {
+    const k = calme ? 1 : .3, kt = calme ? 1 : .12;
+    cx += (x - cx) * k;   cy += (y - cy) * k;
+    tx += (x - tx) * kt;  ty += (y - ty) * kt;
+
+    const vx = x - cx, vy = y - cy;
+    const vit = Math.hypot(vx, vy);
+    const a = Math.atan2(vy, vx) * 180 / Math.PI;
+    const s = calme ? 0 : Math.min(vit / 45, .75);
+
+    // étirement dans le sens du mouvement, sans faire tourner le reflet
+    cur.style.transform = `translate(${cx}px,${cy}px) rotate(${a}deg) scale(${1 + s},${1 - s * .35}) rotate(${-a}deg)`;
+    tail.style.transform = `translate(${tx}px,${ty}px)`;
+    requestAnimationFrame(boucle);
+  })();
+}
+</script>
+
+</body>
+</html>
